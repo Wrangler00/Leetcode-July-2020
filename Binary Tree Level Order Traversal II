@@ -63,3 +63,23 @@ public:
         return ans;
     }
 };
+
+
+//cpp recursive solution using level logic [not my solution]
+
+class Solution {
+public:
+    void dfs(TreeNode* root, int layer, vector<vector<int>> &res) {
+        if (res.size() < layer + 1) res.push_back({});
+        res[layer].push_back(root->val);
+        if (root->left) dfs(root->left, layer + 1, res);
+        if (root->right) dfs(root->right, layer + 1, res);
+    }
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        if (!root) return {};
+        vector<vector<int>> res;
+        dfs(root, 0, res);
+        reverse(begin(res), end(res));
+        return res;
+    }
+};
