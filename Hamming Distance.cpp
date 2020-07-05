@@ -18,6 +18,8 @@ Explanation:
 
 The above arrows point to positions where the corresponding bits are different.
 
+       
+//cpp my solution
 class Solution {
 public:
     int hammingDistance(int x, int y) {
@@ -26,5 +28,29 @@ public:
             ans+=((x >> i)&1) != ((y >> i)&1);
         
         return ans;
+    }
+};
+
+
+//cpp builtin xor solution
+
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        return __builtin_popcount(x^y);
+    }
+};
+
+//cpp using xor and bitwise & operator
+
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        int dist = 0, n = x ^ y;
+        while (n) {
+            ++dist;
+            n &= n - 1;
+        }
+        return dist;
     }
 };
