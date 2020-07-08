@@ -1,0 +1,128 @@
+Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+
+Note:
+
+The solution set must not contain duplicate triplets.
+
+Example:
+
+Given array nums = [-1, 0, 1, 2, -1, -4],
+
+A solution set is:
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+//cpp solution (my sol)
+//using hashmap O(n^2)
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& n) {
+        int sz = n.size();
+        vector<vector<int>> ans;
+        if(sz==0)
+            return ans;
+        
+        map<int,int> mp;
+        
+        for(auto v:n){
+            if(mp.find(v)!=mp.end()){
+                ++mp.at(v);
+            }else{
+                mp.insert({v,1});
+            }
+        }
+        
+        int track=0;
+        for (auto i = mp.begin(); i != mp.end(); i++,++track){
+            if(i->first>0)
+                break;
+            if(i->second>1){
+                int need = -(2*i->first);
+                if(need>=i->first && mp.find(need)!=mp.end()){
+                    if(need == i->first && i->second>2)
+                        ans.push_back(vector<int>{i->first,i->first,need});
+                    else if(need !=i->first)
+                        ans.push_back(vector<int>{i->first,i->first,need});
+                }
+            }
+            
+            for(auto j=next(mp.begin(),track+1); j!=mp.end();j++){
+                int need = -(i->first+j->first);
+                if(need<j->first)
+                    continue;
+                if(need == j->first && j->second<2)
+                    continue;
+                if(mp.find(need)!=mp.end()){
+                    ans.push_back(vector<int>{i->first,j->first,need});
+                }
+            }
+        }
+        
+        return ans;
+    }
+};
+
+
+//cpp solution 2 (not my solution) its faster then sol 1
+
+class Solution {
+public:
+    vector<vector<int> > threeSum(vector<int> &num) {
+
+        vector<vector<int> > res;
+
+        std::sort(num.begin(), num.end());
+
+        for (int i = 0; i < num.size(); i++) {
+
+            int target = -num[i];
+            int front = i + 1;
+            int back = num.size() - 1;
+
+            if(target < 0)
+            {
+                break;
+            }
+
+            while (front < back) {
+
+                int sum = num[front] + num[back];
+
+                // Finding answer which start from number num[i]
+                if (sum < target)
+                    front++;
+
+                else if (sum > target)
+                    back--;
+
+                else {
+                    vector<int> triplet(3, 0);
+                    triplet[0] = num[i];
+                    triplet[1] = num[front];
+                    triplet[2] = num[back];
+                    res.push_back(triplet);
+
+                    // Processing duplicates of Number 2
+                    // Rolling the front pointer to the next different number forwards
+                    while (front < back && num[front] == triplet[1]) front++;
+
+                    // Processing duplicates of Number 3
+                    // Rolling the back pointer to the next different number backwards
+                    while (front < back && num[back] == triplet[2]) back--;
+                }
+
+            }
+
+            // Processing duplicates of Number 1
+            while (i + 1 < num.size() && num[i + 1] == num[i]) 
+                i++;
+
+        }
+
+        return res;
+
+    }
+};
