@@ -55,7 +55,7 @@ Explanation:The maximum width existing in the fourth level with the length 8 (6,
 
 Note: Answer will in the range of 32-bit signed integer.
 
-//cpp my solution
+//cpp my solution not fast though
 
 /**
  * Definition for a binary tree node.
@@ -101,5 +101,32 @@ public:
         }
         
         return (int)ans;
+    }
+};
+
+//cpp recursive solution faster then above 
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        return (int)dfs(root, 0, 1, vector<pair<unsigned long, unsigned long>>() = {});
+    }
+    
+    unsigned long dfs(TreeNode* root,unsigned long level,unsigned long order, vector<pair<unsigned long,unsigned long>>& vec){
+        if(root == NULL)return 0;
+        if(vec.size() == level)vec.push_back({order, order});
+        else vec[level].second = order;
+        return max({vec[level].second - vec[level].first + 1, dfs(root->left, level + 1, 2*order, vec),         dfs(root->right, level + 1, 2*order + 1, vec)});
     }
 };
