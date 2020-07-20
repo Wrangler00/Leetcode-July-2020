@@ -1,0 +1,69 @@
+Remove all elements from a linked list of integers that have value val.
+
+
+//cpp my solution
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+ 
+//iterative
+
+  ListNode* removeElements(ListNode* head, int val) {
+        ListNode* pNode = head;
+        ListNode* prev = head;
+        
+        while(pNode){
+            if(pNode->val == val){
+                if(prev == pNode){
+                    prev = head = pNode->next;    
+                }else{
+                    prev->next = pNode->next;
+                }
+            }else{
+                prev = pNode;
+            }
+            
+            pNode = pNode->next;
+        }
+        
+        return head;
+    }
+    
+ //recursive my solution
+ 
+ class Solution {
+    int the;
+    ListNode *root;
+public:
+    void recurse(ListNode* pNode,ListNode* &parent){
+        if(!pNode)
+            return;
+        
+        if(pNode->val == the){
+            if(parent == pNode){
+                parent = root = pNode->next;
+            }else{
+                parent->next = pNode->next;
+            }
+        }else{
+            parent = pNode;
+        }
+        
+        recurse(pNode->next,parent);
+    }
+    
+    ListNode* removeElements(ListNode* head, int val) {
+        the = val;
+        root = head;
+        recurse(head,head);
+        return root;
+    }
+};
