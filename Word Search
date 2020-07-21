@@ -55,6 +55,8 @@ public:
             findit(i,j+1,pos);
         }   
         
+        //this resets the visited position
+        //basically it resets the path while returning back
         vis[i][j]=0;
         return;
     }
