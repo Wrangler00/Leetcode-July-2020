@@ -1,0 +1,83 @@
+//cpp my solution but took too much time to implement
+//also had to take reference from my previous word search solution
+//also tried too much hit and trial
+
+
+Given a 2D board and a word, find if the word exists in the grid.
+
+The word can be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once.
+
+Example:
+
+board =
+[
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+]
+
+Given word = "ABCCED", return true.
+Given word = "SEE", return true.
+Given word = "ABCB", return false.
+ 
+
+Constraints:
+
+board and word consists only of lowercase and uppercase English letters.
+1 <= board.length <= 200
+1 <= board[i].length <= 200
+1 <= word.length <= 10^3
+
+class Solution {
+    vector<vector<bool>> vis;
+    vector<vector<char>> _board;
+    bool ans=false;
+    string the;
+    int row,col;
+    
+public:
+    void findit(int i,int j,int pos){
+        if(pos >= the.length() || ans){
+            ans=true;
+            return;
+        }
+        
+        if(i<0 || j<0 || i >= row || j >= col || vis[i][j])
+            return;
+        
+        vis[i][j]=1;
+        
+        if(_board[i][j] == the[pos]){
+            ++pos;
+            findit(i-1,j,pos);
+            findit(i,j-1,pos);
+            findit(i+1,j,pos);
+            findit(i,j+1,pos);
+        }   
+        
+        vis[i][j]=0;
+        return;
+    }
+    
+    bool exist(vector<vector<char>>& board, string word) {
+        _board = board;
+        the = word;
+        
+        row = board.size();
+        col = board[0].size();
+        
+        vis = vector<vector<bool>>(row,vector<bool>(col,0));
+        
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                if(board[i][j] == word[0]){
+                    findit(i,j,0);
+                    if(ans)
+                        return ans;
+                }
+            }
+        }
+        
+        return false;
+    }
+};
