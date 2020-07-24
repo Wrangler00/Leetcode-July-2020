@@ -1,0 +1,61 @@
+Given a directed, acyclic graph of N nodes.  Find all possible paths from node 0 to node N-1, and return them in any order.
+
+The graph is given as follows:  the nodes are 0, 1, ..., graph.length - 1.  graph[i] is a list of all nodes j for which the edge (i, j) exists.
+
+Example:
+Input: [[1,2], [3], [3], []] 
+Output: [[0,1,3],[0,2,3]] 
+Explanation: The graph looks like this:
+0--->1
+|    |
+v    v
+2--->3
+There are two paths: 0 -> 1 -> 3 and 0 -> 2 -> 3.
+Note:
+
+The number of nodes in the graph will be in the range [2, 15].
+You can print different paths in any order, but you should keep the order of nodes inside one path.
+
+//cpp dfs path traversal (not my solution)
+
+class Solution {
+vector<vector<int>> adj;
+vector<bool> vis;
+vector<vector<int>> ans;
+int des;
+public:
+    void dfsPath(int u,vector<int> &path){
+        vis[u] = true;
+        path.push_back(u);
+        
+        if(u==des){
+            ans.push_back(path);
+        }else{
+            for(auto v:adj[u]){
+                if(!vis[v]){
+                    dfsPath(v,path);
+                }
+            }
+        }
+        
+        path.pop_back();
+        vis[u] = false;
+    }
+    
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        const int sz = (int)graph.size();
+        adj = vector<vector<int>>(sz,vector<int>());
+        vis = vector<bool>(sz,false);
+        des = sz-1;
+        for(int i=0;i<sz;i++){
+            for(auto v:graph[i]){
+                adj[i].push_back(v);
+            }
+        }
+        
+        vector<int> tmp;
+        dfsPath(0,tmp);
+        
+        return ans;
+    }
+};
