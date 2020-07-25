@@ -49,3 +49,31 @@ public:
         return ans;
     }
 };
+
+//cpp seems like faster solution (not mine)
+
+int findMin(vector<int>& nums) {
+        
+        int low = 0;
+        int high = nums.size()-1;
+        
+        while(low < high)
+        {
+            //cout<<"low= "<<low<<" high= "<<high<<endl;
+            int m = (low+high)/2;
+
+            if(nums[high] < nums[m])
+            {
+                low = m+1;
+            }
+            else if(nums[high] > nums[m])
+            {
+                high = m;
+            }
+            else 
+            {
+                high--;
+            }
+        }
+        return nums[low];
+    }
